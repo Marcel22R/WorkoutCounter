@@ -9,8 +9,6 @@ import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Locale
 import androidx.compose.material3.Text
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 
 
