@@ -1,7 +1,6 @@
 package at.bachelor.workoutcounter
 
 import android.os.Bundle
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.Text
@@ -14,8 +13,6 @@ import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
 import java.util.Locale
-
-
 
 
 class MainActivity : ComponentActivity() {
