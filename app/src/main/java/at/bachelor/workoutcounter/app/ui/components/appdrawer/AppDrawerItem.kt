@@ -44,13 +44,14 @@ fun <T> AppDrawerItem(item: AppDrawerItemInfo<T>, onClick: (options: T) -> Unit)
             Icon(
                 painter = painterResource(id = item.drawableId),
                 contentDescription = stringResource(id = item.descriptionId),
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(24.dp).align(Alignment.CenterVertically),
                 tint = MaterialTheme.colorScheme.primary
             )
             Spacer(modifier = Modifier.width(16.dp))
             Text(
                 text = stringResource(id = item.title), style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Start,
+                modifier = Modifier.align(Alignment.CenterVertically)
             )
 
         }
