@@ -44,7 +44,8 @@ fun <T> AppDrawerItem(item: AppDrawerItemInfo<T>, onClick: (options: T) -> Unit)
             Icon(
                 painter = painterResource(id = item.drawableId),
                 contentDescription = stringResource(id = item.descriptionId),
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
+                tint = MaterialTheme.colorScheme.primary
             )
             Spacer(modifier = Modifier.width(16.dp))
             Text(

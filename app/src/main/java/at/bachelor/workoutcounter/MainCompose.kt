@@ -114,7 +114,7 @@ object DrawerParams {
         AppDrawerItemInfo(
             MainNavOption.STATISTICS,
             R.string.drawer_statistics,
-            R.drawable.ic_statistics,
+            R.drawable.baseline_bar_chart_24,
             R.string.drawer_statistics_description
         )
     )
