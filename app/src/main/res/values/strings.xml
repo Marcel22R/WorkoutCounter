@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name" translatable="false">WorkoutCounter</string>
+    <string name="navigation_drawer_open">Toggle drawer</string>
+    <string name="drawer_home">Home\n</string>
+    <string name="drawer_home_description">An icon looking like a home</string>
+    <string name="drawer_trainig">Training\n</string>
+    <string name="drawer_training_description">Icon looking like a dumbbell</string>
+    <string name="drawer_statistics">Statistics</string>
+    <string name="drawer_statistics_description">Icon looking like barchart</string>
+    <string name="drawer_menu_description">Menu Icon\n</string>
+    <string name="ic_arrow_back">Back arrow button</string>
+    <string name="homeTitle">Home</string>
 </resources>
