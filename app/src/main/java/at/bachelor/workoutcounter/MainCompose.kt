@@ -42,7 +42,7 @@ fun MainCompose(
 
                             MainNavOption.TRAINING -> navController.navigate(onUserPickedOption.name) {
                                 popUpTo(
-                                    NavRoutes.TrainingRoute.name
+                                    NavRoutes.PastWorkoutsRoute.name
                                 )
                             }
 
@@ -89,7 +89,7 @@ fun MainCompose(
 
 enum class NavRoutes {
     HomeRoute,
-    TrainingRoute,
+    PastWorkoutsRoute,
     StatisticsRoute,
     RegistrationRoute,
     LoginRoute,
@@ -100,6 +100,11 @@ enum class NavRoutes {
 object DrawerParams {
     val drawerButtons = arrayListOf(
         AppDrawerItemInfo(
+            MainNavOption.PROFILE,
+            R.string.drawer_profile,
+            R.drawable.baseline_account_circle_24,
+            R.string.drawer_profile_description
+        ),AppDrawerItemInfo(
             MainNavOption.HOME,
             R.string.drawer_home,
             R.drawable.ic_home,

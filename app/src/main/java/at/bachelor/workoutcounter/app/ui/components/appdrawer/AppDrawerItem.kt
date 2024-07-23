@@ -53,7 +53,6 @@ fun <T> AppDrawerItem(item: AppDrawerItemInfo<T>, onClick: (options: T) -> Unit)
                 textAlign = TextAlign.Start,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
-
         }
 
 
