@@ -42,8 +42,12 @@ fun MainCompose(
 
                             MainNavOption.TRAINING -> navController.navigate(onUserPickedOption.name) {
                                 popUpTo(
-                                    NavRoutes.PastWorkoutsRoute.name
+                                    NavRoutes.TrainingRoute.name
                                 )
+                            }
+
+                            MainNavOption.PAST_WORKOUTS -> navController.navigate(onUserPickedOption.name) {
+                                popUpTo(NavRoutes.PastWorkoutsRoute.name)
                             }
 
                             MainNavOption.STATISTICS -> navController.navigate(onUserPickedOption.name) {
@@ -75,12 +79,13 @@ fun MainCompose(
                                     NavRoutes.ProfileRoute.name
                                 )
                             }
+
                         }
                     }
                 }) {
                 //could add logic for registration here
                 NavHost(navController, startDestination = NavRoutes.HomeRoute.name) {
-                    mainGraph(drawerState)
+                    mainGraph(drawerState, navController)
                 }
             }
         }
@@ -90,6 +95,7 @@ fun MainCompose(
 enum class NavRoutes {
     HomeRoute,
     PastWorkoutsRoute,
+    TrainingRoute,
     StatisticsRoute,
     RegistrationRoute,
     LoginRoute,
@@ -104,14 +110,14 @@ object DrawerParams {
             R.string.drawer_profile,
             R.drawable.baseline_account_circle_24,
             R.string.drawer_profile_description
-        ),AppDrawerItemInfo(
+        ), AppDrawerItemInfo(
             MainNavOption.HOME,
             R.string.drawer_home,
             R.drawable.ic_home,
             R.string.drawer_home_description
         ),
         AppDrawerItemInfo(
-            MainNavOption.TRAINING,
+            MainNavOption.PAST_WORKOUTS,
             R.string.drawer_trainig,
             R.drawable.ic_training,
             R.string.drawer_training_description
