@@ -7,7 +7,7 @@
     <string name="drawer_training_description">Icon looking like a dumbbell</string>
     <string name="drawer_statistics">Statistics</string>
     <string name="drawer_statistics_description">Icon looking like barchart</string>
-    <string name="drawer_menu_description">Menu Icon\n</string>
+    <string name="drawer_menu_description">Menu Icon</string>
     <string name="ic_arrow_back">Back arrow button</string>
     <string name="homeTitle">Home</string>
     <string name="drawer_profile_description">Profile Icon</string>

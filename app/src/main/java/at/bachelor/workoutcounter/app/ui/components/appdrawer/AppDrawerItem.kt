@@ -31,7 +31,7 @@ fun <T> AppDrawerItem(item: AppDrawerItemInfo<T>, onClick: (options: T) -> Unit)
     Surface(
         color = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier
-            .width(200.dp)
+            .width(250.dp)
             .padding(16.dp),
         onClick = { onClick(item.drawerOption) },
         shape = RoundedCornerShape(50)
@@ -47,7 +47,7 @@ fun <T> AppDrawerItem(item: AppDrawerItemInfo<T>, onClick: (options: T) -> Unit)
                 modifier = Modifier.size(24.dp).align(Alignment.CenterVertically),
                 tint = MaterialTheme.colorScheme.primary
             )
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(20.dp))
             Text(
                 text = stringResource(id = item.title), style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Start,
