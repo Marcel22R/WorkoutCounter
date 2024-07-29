@@ -60,6 +60,6 @@ dependencies {
     androidTestImplementation(libs.androidx.navigation.testing)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.coroutines.android)
-
+    implementation(libs.metawear)
 
 }
