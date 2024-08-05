@@ -1,68 +1,100 @@
 package at.bachelor.workoutcounter
 
-import android.bluetooth.BluetoothManager
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.IBinder
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.mbientlab.metawear.MetaWearBoard
-import com.mbientlab.metawear.android.BtleService
+import androidx.activity.viewModels
+import at.bachelor.workoutcounter.repository.MetaMotionRepository
+import at.bachelor.workoutcounter.trainingScreen.TrainingViewModel
 
 
 class MainActivity : ComponentActivity() {
 
-    private lateinit var serviceBinder: BtleService.LocalBinder
-    private lateinit var board: MetaWearBoard
+//    private lateinit var accelerometer: Accelerometer
+//    private lateinit var serviceBinder: BtleService.LocalBinder
+//    private lateinit var board: MetaWearBoard
+//    private val trainingViewModel: TrainingViewModel by viewModels()
+
+    private val trainingViewModel: TrainingViewModel by viewModels()
+    private lateinit var metaMotionRepository: MetaMotionRepository
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState) // Call super.onCreate() first
+        super.onCreate(savedInstanceState)
+        metaMotionRepository = MetaMotionRepository(context = this, viewModel = trainingViewModel)
+        metaMotionRepository.bindService()
         setContent {
-            MainCompose()
-        }
-        val intent = Intent(this, BtleService::class.java)
-        applicationContext.bindService(intent, serviceConnection, BIND_AUTO_CREATE)
-    }
-
-    private val serviceConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            serviceBinder = service as BtleService.LocalBinder
-            Log.i("imu", "Service connected")
-
-            retrieveBoard(getString(R.string.mac_address))
-
+            MainCompose(trainingViewModel, metaMotionRepository)
         }
 
-        override fun onServiceDisconnected(name: ComponentName?) {
+//        TrainingScreen(trainingViewModel, { startAccelerometer() }, { stopAccelerometer() }) this works
+//        val intent = Intent(this, BtleService::class.java)
+//        applicationContext.bindService(intent, serviceConnection, BIND_AUTO_CREATE)
 
-        }
-
-
-    }
-
-    fun retrieveBoard(macAddress: String) {
-        val btManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-        val remoteDevice = btManager.adapter.getRemoteDevice(macAddress)
-        board = serviceBinder.getMetaWearBoard(remoteDevice)
-        board.connectAsync().continueWith { task ->
-            if (task.isFaulted) {
-                Log.i("imu", "Board failed to connect")
-            } else {
-                Log.i("imu", "Connected to $macAddress")
-            }
-            null
-        }
     }
 
 
     override fun onDestroy() {
         super.onDestroy()
-        applicationContext.unbindService(serviceConnection)
+        metaMotionRepository.unbindService()
     }
+
+//    private val serviceConnection = object : ServiceConnection {
+//        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+//            serviceBinder = service as BtleService.LocalBinder
+//            Log.i("imu", "Service connected")
+//
+//            retrieveBoard(getString(R.string.mac_address))
+//        }
+//
+//        override fun onServiceDisconnected(name: ComponentName?) {
+//
+//        }
+//
+//
+//    }
+//
+//    fun startAccelerometer() {
+//        accelerometer.start()
+//        accelerometer.acceleration().start()
+//    }
+//
+//    fun stopAccelerometer() {
+//        accelerometer.stop()
+//        accelerometer.acceleration().stop()
+//    }
+//
+//
+//    fun retrieveBoard(macAddress: String) {
+//        val btManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+//        val remoteDevice = btManager.adapter.getRemoteDevice(macAddress)
+//        board = serviceBinder.getMetaWearBoard(remoteDevice)
+//        board.connectAsync().onSuccessTask { task ->
+//            Log.i("imu", "Connected to $macAddress")
+//            accelerometer = board.getModule(Accelerometer::class.java)
+//            accelerometer.configure().odr(25f).commit()
+//
+//            accelerometer.acceleration().addRouteAsync { source ->
+//                source.stream { data, _ ->
+//                    Log.i(
+//                        "imu",
+//                        "Acceleration: ${data.value(Acceleration::class.java)}"
+//                    )
+//                    trainingViewModel.updateAccelerationData(data.value(Acceleration::class.java))
+//                }
+//            }
+//
+//        }.continueWith { task ->
+//            if (task.isFaulted) {
+//                Log.i("imu", "Board failed to connect")
+//            } else {
+//                Log.i("imu", "Route setup completed")
+//            }
+//            null
+//        }
+//    }
+//
+//
 
 
 }

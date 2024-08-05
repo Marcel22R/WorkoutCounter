@@ -7,19 +7,21 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import at.bachelor.workoutcounter.app.ui.components.appdrawer.AppDrawerContent
 import at.bachelor.workoutcounter.app.ui.components.appdrawer.AppDrawerItemInfo
-
+import at.bachelor.workoutcounter.repository.MetaMotionRepository
+import at.bachelor.workoutcounter.trainingScreen.TrainingViewModel
 import navigation.MainNavOption
 import navigation.mainGraph
 
 
 @Composable
 fun MainCompose(
+    viewModel: TrainingViewModel,
+    metaMotionRepository: MetaMotionRepository,
     navController: NavHostController = rememberNavController(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
 ) {
@@ -39,7 +41,6 @@ fun MainCompose(
                                     NavRoutes.HomeRoute.name
                                 )
                             }
-
                             MainNavOption.TRAINING -> navController.navigate(onUserPickedOption.name) {
                                 popUpTo(
                                     NavRoutes.TrainingRoute.name
@@ -85,7 +86,7 @@ fun MainCompose(
                 }) {
                 //could add logic for registration here
                 NavHost(navController, startDestination = NavRoutes.HomeRoute.name) {
-                    mainGraph(drawerState, navController)
+                    mainGraph(drawerState, navController, viewModel, metaMotionRepository)
                 }
             }
         }
@@ -131,10 +132,4 @@ object DrawerParams {
     )
 
 
-}
-
-@Preview
-@Composable
-fun MainActivityPreview() {
-    MainCompose()
 }
