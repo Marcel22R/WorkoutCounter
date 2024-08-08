@@ -17,6 +17,7 @@ enum class MainNavOption {
     LOGIN,
     HOME,
     TRAINING,
+    DATA_COLLECTION,
     PAST_WORKOUTS,
     STATISTICS,
     SETTINGS,
@@ -44,6 +45,9 @@ fun NavGraphBuilder.mainGraph(
                 trainingViewModel = viewModel,
                 startAccelerometer = { metaMotionRepository.startAccelerometer() },
                 stopAccelerometer = { metaMotionRepository.stopAccelerometer() })
+        }
+        composable(MainNavOption.DATA_COLLECTION.name){
+            Text(text = "This is Data Collection")
         }
         composable(MainNavOption.STATISTICS.name) {
             Text(text = "This is Statistics")

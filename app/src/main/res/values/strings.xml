@@ -13,4 +13,6 @@
     <string name="drawer_profile_description">Profile Icon</string>
     <string name="drawer_profile">Profile</string>
     <string name="mac_address">E9:92:1B:D0:61:FB</string>
+    <string name="drawer_data_collection">Data Collection</string>
+    <string name="drawer_data_collection_description">Data Collection Icon</string>
 </resources>

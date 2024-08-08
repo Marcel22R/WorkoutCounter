@@ -41,9 +41,18 @@ fun MainCompose(
                                     NavRoutes.HomeRoute.name
                                 )
                             }
+
                             MainNavOption.TRAINING -> navController.navigate(onUserPickedOption.name) {
                                 popUpTo(
                                     NavRoutes.TrainingRoute.name
+                                )
+                            }
+
+                            MainNavOption.DATA_COLLECTION -> navController.navigate(
+                                onUserPickedOption.name
+                            ) {
+                                popUpTo(
+                                    NavRoutes.DataCollectionRoute.name
                                 )
                             }
 
@@ -97,6 +106,7 @@ enum class NavRoutes {
     HomeRoute,
     PastWorkoutsRoute,
     TrainingRoute,
+    DataCollectionRoute,
     StatisticsRoute,
     RegistrationRoute,
     LoginRoute,
@@ -122,6 +132,12 @@ object DrawerParams {
             R.string.drawer_trainig,
             R.drawable.ic_training,
             R.string.drawer_training_description
+        ),
+        AppDrawerItemInfo(
+            MainNavOption.DATA_COLLECTION,
+            R.string.drawer_data_collection,
+            R.drawable.ic_data_collection,
+            R.string.drawer_data_collection_description
         ),
         AppDrawerItemInfo(
             MainNavOption.STATISTICS,
