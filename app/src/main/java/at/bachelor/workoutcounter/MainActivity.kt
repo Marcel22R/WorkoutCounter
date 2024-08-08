@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import at.bachelor.workoutcounter.repository.MetaMotionRepository
-import at.bachelor.workoutcounter.trainingScreen.TrainingViewModel
+import at.bachelor.workoutcounter.screens.trainingScreen.TrainingViewModel
 
 
 class MainActivity : ComponentActivity() {

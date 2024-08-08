@@ -13,7 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import at.bachelor.workoutcounter.app.ui.components.appdrawer.AppDrawerContent
 import at.bachelor.workoutcounter.app.ui.components.appdrawer.AppDrawerItemInfo
 import at.bachelor.workoutcounter.repository.MetaMotionRepository
-import at.bachelor.workoutcounter.trainingScreen.TrainingViewModel
+import at.bachelor.workoutcounter.screens.trainingScreen.TrainingViewModel
 import navigation.MainNavOption
 import navigation.mainGraph
 

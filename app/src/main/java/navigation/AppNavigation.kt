@@ -7,10 +7,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import at.bachelor.workoutcounter.NavRoutes
-import at.bachelor.workoutcounter.homeScreen.HomeScreen
+import at.bachelor.workoutcounter.screens.screens.homeScreen.HomeScreen
 import at.bachelor.workoutcounter.repository.MetaMotionRepository
-import at.bachelor.workoutcounter.trainingScreen.TrainingScreen
-import at.bachelor.workoutcounter.trainingScreen.TrainingViewModel
+import at.bachelor.workoutcounter.screens.trainingScreen.TrainingScreen
+import at.bachelor.workoutcounter.screens.trainingScreen.TrainingViewModel
 
 enum class MainNavOption {
     REGISTRATION,

@@ -8,7 +8,7 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import android.util.Log
 import at.bachelor.workoutcounter.R
-import at.bachelor.workoutcounter.trainingScreen.TrainingViewModel
+import at.bachelor.workoutcounter.screens.trainingScreen.TrainingViewModel
 import com.mbientlab.metawear.MetaWearBoard
 import com.mbientlab.metawear.android.BtleService
 import com.mbientlab.metawear.android.BtleService.LocalBinder
