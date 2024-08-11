@@ -16,10 +16,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import at.bachelor.workoutcounter.repository.MetaMotionRepository
+import at.bachelor.workoutcounter.screens.dataCollectionScreen.DataCollectionViewModel
 
 @Composable
-fun TrainingScreen(trainingViewModel: TrainingViewModel = viewModel(), startAccelerometer: () -> Unit, stopAccelerometer: () -> Unit) {
-    val data by trainingViewModel.data.collectAsState()
+fun TrainingScreen(
+    dataCollection: DataCollectionViewModel = viewModel(),
+    metaMotionRepository: MetaMotionRepository
+) {
+    val accelerationData by dataCollection.accelerationData.collectAsState()
+    val gyroscopeData by dataCollection.gyroscopeData.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -27,17 +34,18 @@ fun TrainingScreen(trainingViewModel: TrainingViewModel = viewModel(), startAcce
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = data.toString(), color = Color.White)
+        Text(text = accelerationData.toString(), color = Color.White)
+        Text(text = gyroscopeData.toString(), color = Color.White)
 
-        Spacer(modifier = Modifier.height(16.dp)) // Adding space between the text and the buttons
+        Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = startAccelerometer) {
+        Button(onClick = { metaMotionRepository.startSensor(false) }) {
             Text(text = "Start")
         }
 
-        Spacer(modifier = Modifier.height(8.dp)) // Adding space between the buttons
+        Spacer(modifier = Modifier.height(8.dp))
 
-        Button(onClick = stopAccelerometer) {
+        Button(onClick = { metaMotionRepository.stopSensor() }) {
             Text(text = "Stop")
         }
     }

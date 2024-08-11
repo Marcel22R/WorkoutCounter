@@ -5,22 +5,26 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import at.bachelor.workoutcounter.repository.MetaMotionRepository
-import at.bachelor.workoutcounter.screens.trainingScreen.TrainingViewModel
+import at.bachelor.workoutcounter.screens.dataCollectionScreen.DataCollectionViewModel
 
 
 class MainActivity : ComponentActivity() {
-    private val trainingViewModel: TrainingViewModel by viewModels()
+    private val dataCollectionViewModel: DataCollectionViewModel by viewModels()
     private lateinit var metaMotionRepository: MetaMotionRepository
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        metaMotionRepository = MetaMotionRepository(context = this, viewModel = trainingViewModel)
+        metaMotionRepository = MetaMotionRepository(
+            context = this,
+            dataCollectionViewModel = dataCollectionViewModel
+        )
         metaMotionRepository.bindService()
         setContent {
-            MainCompose(trainingViewModel, metaMotionRepository)
+            MainCompose(dataCollectionViewModel, metaMotionRepository)
         }
     }
+
     override fun onDestroy() {
         super.onDestroy()
         metaMotionRepository.unbindService()

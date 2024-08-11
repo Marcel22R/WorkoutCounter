@@ -7,10 +7,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import at.bachelor.workoutcounter.NavRoutes
-import at.bachelor.workoutcounter.screens.screens.homeScreen.HomeScreen
 import at.bachelor.workoutcounter.repository.MetaMotionRepository
+import at.bachelor.workoutcounter.screens.dataCollectionScreen.DataCollectionScreen
+import at.bachelor.workoutcounter.screens.dataCollectionScreen.DataCollectionViewModel
+import at.bachelor.workoutcounter.screens.screens.homeScreen.HomeScreen
 import at.bachelor.workoutcounter.screens.trainingScreen.TrainingScreen
-import at.bachelor.workoutcounter.screens.trainingScreen.TrainingViewModel
 
 enum class MainNavOption {
     REGISTRATION,
@@ -28,7 +29,7 @@ enum class MainNavOption {
 fun NavGraphBuilder.mainGraph(
     drawerState: DrawerState,
     navController: NavHostController,
-    viewModel: TrainingViewModel,
+    dataCollectionViewModel: DataCollectionViewModel,
     metaMotionRepository: MetaMotionRepository
 ) {
     navigation(startDestination = MainNavOption.HOME.name, route = NavRoutes.HomeRoute.name) {
@@ -42,12 +43,11 @@ fun NavGraphBuilder.mainGraph(
         }
         composable(MainNavOption.TRAINING.name) {
             TrainingScreen(
-                trainingViewModel = viewModel,
-                startAccelerometer = { metaMotionRepository.startAccelerometer() },
-                stopAccelerometer = { metaMotionRepository.stopAccelerometer() })
+                dataCollection = dataCollectionViewModel,
+                metaMotionRepository = metaMotionRepository)
         }
-        composable(MainNavOption.DATA_COLLECTION.name){
-            Text(text = "This is Data Collection")
+        composable(MainNavOption.DATA_COLLECTION.name) {
+            DataCollectionScreen(viewModel = dataCollectionViewModel, metaMotionRepository, drawerState = drawerState)
         }
         composable(MainNavOption.STATISTICS.name) {
             Text(text = "This is Statistics")

@@ -13,14 +13,14 @@ import androidx.navigation.compose.rememberNavController
 import at.bachelor.workoutcounter.app.ui.components.appdrawer.AppDrawerContent
 import at.bachelor.workoutcounter.app.ui.components.appdrawer.AppDrawerItemInfo
 import at.bachelor.workoutcounter.repository.MetaMotionRepository
-import at.bachelor.workoutcounter.screens.trainingScreen.TrainingViewModel
+import at.bachelor.workoutcounter.screens.dataCollectionScreen.DataCollectionViewModel
 import navigation.MainNavOption
 import navigation.mainGraph
 
 
 @Composable
 fun MainCompose(
-    viewModel: TrainingViewModel,
+    dataCollectionViewModel: DataCollectionViewModel,
     metaMotionRepository: MetaMotionRepository,
     navController: NavHostController = rememberNavController(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
@@ -93,9 +93,13 @@ fun MainCompose(
                         }
                     }
                 }) {
-                //could add logic for registration here
                 NavHost(navController, startDestination = NavRoutes.HomeRoute.name) {
-                    mainGraph(drawerState, navController, viewModel, metaMotionRepository)
+                    mainGraph(
+                        drawerState,
+                        navController,
+                        dataCollectionViewModel,
+                        metaMotionRepository
+                    )
                 }
             }
         }
