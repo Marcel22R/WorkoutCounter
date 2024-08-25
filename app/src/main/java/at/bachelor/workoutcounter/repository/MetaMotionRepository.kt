@@ -65,22 +65,28 @@ class MetaMotionRepository(
     }
 
 
-    private fun saveAccelerationData(acceleration: Acceleration) {
-        val file = File(context.getExternalFilesDir(null), "acceleration_data.csv")
+    private fun saveAccelerationData(acceleration: Acceleration, fileName: String) {
+        Log.i("imu", "Saving accelerationData")
+        val file = File(context.getExternalFilesDir(null), fileName + "_acceleration.csv")
+        Log.i("imu", "File path: ${file.absolutePath}")
         try {
             val writer = BufferedWriter(FileWriter(file, true))
             writer.write("${System.currentTimeMillis()},${acceleration.x()},${acceleration.y()},${acceleration.z()}\n")
+            writer.flush()
             writer.close()
         } catch (e: IOException) {
             Log.e("imu", "Error writing acceleration data to CSV", e)
         }
     }
 
-    private fun saveAngularVelocityData(angularVelocity: AngularVelocity) {
-        val file = File(context.getExternalFilesDir(null), "angular_velocity_data.csv")
+    private fun saveAngularVelocityData(angularVelocity: AngularVelocity, fileName: String) {
+        Log.i("imu", "Saving angular velocity data")
+        val file = File(context.getExternalFilesDir(null), fileName + "_angular_velocity.csv")
+        Log.i("imu", "File path: ${file.absolutePath}")
         try {
             val writer = BufferedWriter(FileWriter(file, true))
             writer.write("${System.currentTimeMillis()},${angularVelocity.x()},${angularVelocity.y()},${angularVelocity.z()}\n")
+            writer.flush()
             writer.close()
         } catch (e: IOException) {
             Log.e("imu", "Error writing angular velocity data to CSV", e)
@@ -102,25 +108,22 @@ class MetaMotionRepository(
     }
 
 
-    private fun setupSavingRoutes() {
+    private fun setupSavingRoutes(fileName: String) {
         Log.i("imu", "Setting up saving routes")
         accelerationData.acceleration().addRouteAsync { source ->
             source.stream { data, _ ->
                 val acceleration = data.value(Acceleration::class.java)
                 Log.i("imu", "Acceleration: $acceleration")
                 dataCollectionViewModel.updateAccelerationData(acceleration)
-                saveAccelerationData(acceleration)
+                saveAccelerationData(acceleration, fileName)
             }
         }
-
-
-
         gyroscopeData.angularVelocity().addRouteAsync { source ->
             source.stream { data, _ ->
                 val angularVelocity = data.value(AngularVelocity::class.java)
                 Log.i("imu", "Angular velocity: $angularVelocity")
                 dataCollectionViewModel.updateGyroscopeData(angularVelocity)
-                saveAngularVelocityData(angularVelocity)
+                saveAngularVelocityData(angularVelocity, fileName)
             }
         }
 
@@ -143,19 +146,13 @@ class MetaMotionRepository(
         }
     }
 
-
-    fun startSensor(saveData: Boolean) {
+    fun startSensor() {
         if (::board.isInitialized) {
-            if (saveData) {
-                setupSavingRoutes()
-            } else {
-                setupStreamingRoutes()
-            }
+            setupStreamingRoutes()
             accelerationData.start()
             gyroscopeData.start()
             accelerationData.acceleration().start()
             gyroscopeData.angularVelocity().start()
-            Log.i("imu", "Data collection started with saveData=$saveData")
         } else {
             Log.e("imu", "Sensor not initialized")
         }
@@ -168,6 +165,19 @@ class MetaMotionRepository(
             accelerationData.stop()
             gyroscopeData.stop()
             Log.i("imu", "Data collection stopped")
+        } else {
+            Log.e("imu", "Sensor not initialized")
+        }
+    }
+
+    fun startSensorAndSave(fileName: String) {
+        if (::board.isInitialized) {
+            setupSavingRoutes(fileName)
+            accelerationData.start()
+            gyroscopeData.start()
+            accelerationData.acceleration().start()
+            gyroscopeData.angularVelocity().start()
+            Log.i("imu", "Data collection started with filename=$fileName")
         } else {
             Log.e("imu", "Sensor not initialized")
         }

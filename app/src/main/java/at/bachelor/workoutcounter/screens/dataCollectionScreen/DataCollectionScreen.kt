@@ -11,8 +11,13 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -28,6 +33,8 @@ fun DataCollectionScreen(
     metaMotionRepository: MetaMotionRepository,
     drawerState: DrawerState
 ) {
+    var fileName by remember { mutableStateOf("") }
+
     val accelerationData = viewModel.accelerationData.collectAsState()
     val gyroData = viewModel.gyroscopeData.collectAsState()
 
@@ -39,7 +46,7 @@ fun DataCollectionScreen(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(onClick = {
-                metaMotionRepository.startSensor(true)
+                metaMotionRepository.startSensorAndSave(fileName)
             }
 
             ) {
@@ -59,6 +66,16 @@ fun DataCollectionScreen(
                 .fillMaxSize()
                 .padding(it),
         ) {
+            TextField(
+                value = fileName,
+                onValueChange = { fileName = it },
+                label = { Text("Enter file name") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
+
+
             Text("Acceleration: " + accelerationData.value)
             Text("Gyroscope: " + gyroData.value)
         }

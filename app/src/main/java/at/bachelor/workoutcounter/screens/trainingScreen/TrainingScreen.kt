@@ -39,7 +39,7 @@ fun TrainingScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { metaMotionRepository.startSensor(false) }) {
+        Button(onClick = { metaMotionRepository.startSensor() }) {
             Text(text = "Start")
         }
 
