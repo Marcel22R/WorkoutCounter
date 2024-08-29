@@ -17,4 +17,6 @@
     <string name="drawer_data_collection_description">Data Collection Icon</string>
     <string name="start">Start</string>
     <string name="end">End</string>
+    <string name="drawer_collected_data">Collected data</string>
+    <string name="drawer_collected_data_description">Presents collected datasets\n</string>
 </resources>

@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import at.bachelor.workoutcounter.NavRoutes
 import at.bachelor.workoutcounter.repository.MetaMotionRepository
+import at.bachelor.workoutcounter.screens.collectedDataScreen.CollectedDataScreen
 import at.bachelor.workoutcounter.screens.dataCollectionScreen.DataCollectionScreen
 import at.bachelor.workoutcounter.screens.dataCollectionScreen.DataCollectionViewModel
 import at.bachelor.workoutcounter.screens.screens.homeScreen.HomeScreen
@@ -19,6 +20,7 @@ enum class MainNavOption {
     HOME,
     TRAINING,
     DATA_COLLECTION,
+    COLLECTED_DATA,
     PAST_WORKOUTS,
     STATISTICS,
     SETTINGS,
@@ -44,10 +46,19 @@ fun NavGraphBuilder.mainGraph(
         composable(MainNavOption.TRAINING.name) {
             TrainingScreen(
                 dataCollection = dataCollectionViewModel,
-                metaMotionRepository = metaMotionRepository)
+                metaMotionRepository = metaMotionRepository
+            )
         }
         composable(MainNavOption.DATA_COLLECTION.name) {
-            DataCollectionScreen(viewModel = dataCollectionViewModel, metaMotionRepository, drawerState = drawerState)
+            DataCollectionScreen(
+                viewModel = dataCollectionViewModel,
+                metaMotionRepository,
+                drawerState = drawerState
+            )
+        }
+        composable(MainNavOption.COLLECTED_DATA.name) {
+            CollectedDataScreen(drawerState=drawerState)
+
         }
         composable(MainNavOption.STATISTICS.name) {
             Text(text = "This is Statistics")
