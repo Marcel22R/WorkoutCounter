@@ -71,7 +71,7 @@ fun DataCollectionScreen(
         "Lat-Pulldown",
         "Break"
     )
-    val intensityOptions = listOf("Heavy", "Light")
+    val intensityOptions = listOf("Heavy", "Light", "Standing", "Sitting")
 
     val accelerationData = viewModel.accelerationData.collectAsState()
     val gyroData = viewModel.gyroscopeData.collectAsState()
