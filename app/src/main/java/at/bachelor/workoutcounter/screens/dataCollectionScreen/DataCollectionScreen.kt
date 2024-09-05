@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -25,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +39,7 @@ import at.bachelor.workoutcounter.repository.MetaMotionRepository
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DataCollectionScreen(
     viewModel: DataCollectionViewModel,
@@ -50,7 +55,7 @@ fun DataCollectionScreen(
 
     // Getting the current date and time formatted
     val currentDateTime = remember {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
         LocalDateTime.now().format(formatter)
     }
 
@@ -58,8 +63,15 @@ fun DataCollectionScreen(
     var expandedExercise by remember { mutableStateOf(false) }
     var expandedIntensity by remember { mutableStateOf(false) }
 
-    val exerciseOptions = listOf("Push-up", "Squat", "Deadlift", "Bench Press", "Pull-up")
-    val intensityOptions = listOf("High", "Low")
+    val exerciseOptions = listOf(
+        "Flat-bench-press",
+        "Squats",
+        "Romanian-deadlift",
+        "Arnold-press",
+        "Lat-Pulldown",
+        "Break"
+    )
+    val intensityOptions = listOf("Heavy", "Light")
 
     val accelerationData = viewModel.accelerationData.collectAsState()
     val gyroData = viewModel.gyroscopeData.collectAsState()
@@ -77,6 +89,8 @@ fun DataCollectionScreen(
                     if (selectedTabIndex == 0) {
                         metaMotionRepository.startSensorAndSave(fileNameSimple)
                     } else {
+                        fileNameAdvanced =
+                            exerciseName + "_" + personName + "_" + intensity + "_" + setCount + "_" + currentDateTime
                         metaMotionRepository.startSensorAndSave(fileNameAdvanced)
                     }
                 }) {
@@ -111,11 +125,8 @@ fun DataCollectionScreen(
                     text = { Text("Advanced") }
                 )
             }
-
-            // Content based on the selected tab
             when (selectedTabIndex) {
                 0 -> {
-                    // Simple text entry mode
                     TextField(
                         value = fileNameSimple,
                         onValueChange = { fileNameSimple = it },
@@ -129,30 +140,38 @@ fun DataCollectionScreen(
                 1 -> {
                     // Advanced mode with dropdowns and additional fields
                     // Dropdown for exercise name
-                    TextField(
-                        value = exerciseName,
-                        onValueChange = {},
-                        label = { Text("Exercise Name") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                            .clickable { expandedExercise = true }
-                    )
-                    DropdownMenu(
+                    ExposedDropdownMenuBox(
                         expanded = expandedExercise,
-                        onDismissRequest = { expandedExercise = false }
-                    ) {
-                        exerciseOptions.forEach { exercise ->
-                            DropdownMenuItem(
-                                text = { Text(exercise) },
-                                onClick = {
-                                    exerciseName = exercise
-                                    expandedExercise = false
-                                }
-                            )
+                        onExpandedChange = { expandedExercise = it }) {
+                        TextField(
+                            value = exerciseName,
+                            label = { Text(text = "Choose exercise") },
+                            readOnly = true,
+                            onValueChange = {},
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedExercise) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .clickable { expandedExercise = true }
+                                .menuAnchor()
+                        )
+                        ExposedDropdownMenu(
+                            expanded = expandedExercise,
+                            onDismissRequest = { expandedExercise = false }) {
+                            exerciseOptions.forEach { exercise ->
+                                DropdownMenuItem(
+                                    text = { Text(exercise) },
+                                    onClick = {
+                                        exerciseName = exercise
+                                        expandedExercise = false
+                                    },
+                                    colors = MenuDefaults.itemColors(
+                                        textColor = Color.White
+                                    )
+                                )
+                            }
                         }
                     }
-
                     // TextField for person's name
                     TextField(
                         value = personName,
@@ -162,36 +181,46 @@ fun DataCollectionScreen(
                             .fillMaxWidth()
                             .padding(16.dp)
                     )
-
-                    // Dropdown for intensity
-                    TextField(
-                        value = intensity,
-                        onValueChange = {},
-                        label = { Text("Intensity") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                            .clickable { expandedIntensity = true }
-                    )
-                    DropdownMenu(
+                    ExposedDropdownMenuBox(
                         expanded = expandedIntensity,
-                        onDismissRequest = { expandedIntensity = false }
-                    ) {
-                        intensityOptions.forEach { level ->
-                            DropdownMenuItem(
-                                text = { Text(level) },
-                                onClick = {
-                                    intensity = level
-                                    expandedIntensity = false
-                                }
-                            )
+                        onExpandedChange = { expandedIntensity = it }) {
+                        TextField(
+                            value = intensity,
+                            label = { Text(text = "Choose intensity") },
+                            readOnly = true,
+                            onValueChange = {},
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedIntensity) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .clickable { expandedIntensity = true }
+                                .menuAnchor()
+                        )
+                        ExposedDropdownMenu(
+                            expanded = expandedIntensity,
+                            onDismissRequest = { expandedIntensity = false }) {
+                            intensityOptions.forEach { intensityOption ->
+                                DropdownMenuItem(
+                                    text = { Text(intensityOption) },
+                                    onClick = {
+                                        intensity = intensityOption
+                                        expandedIntensity = false
+                                    },
+                                    colors = MenuDefaults.itemColors(
+                                        textColor = Color.White
+                                    )
+                                )
+                            }
                         }
                     }
+
 
                     // Number entry for set count
                     TextField(
                         value = setCount,
-                        onValueChange = { setCount = it.filter { it.isDigit() } },  // Ensure only digits are entered
+                        onValueChange = {
+                            setCount = it.filter { it.isDigit() }
+                        },  // Ensure only digits are entered
                         label = { Text("Set Count") },
                         modifier = Modifier
                             .fillMaxWidth()

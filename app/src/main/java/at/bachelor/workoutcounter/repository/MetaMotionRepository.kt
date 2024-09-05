@@ -65,13 +65,26 @@ class MetaMotionRepository(
     }
 
 
+    private var startTime = System.currentTimeMillis()
+
     private fun saveAccelerationData(acceleration: Acceleration, fileName: String) {
         Log.i("imu", "Saving accelerationData")
         val file = File(context.getExternalFilesDir(null), fileName + "_acceleration.csv")
         Log.i("imu", "File path: ${file.absolutePath}")
+
         try {
             val writer = BufferedWriter(FileWriter(file, true))
-            writer.write("${System.currentTimeMillis()},${acceleration.x()},${acceleration.y()},${acceleration.z()}\n")
+
+            // Write header if file is empty
+            if (file.length() == 0L) {
+                writer.write("Timestamp (ms),ISO DateTime,Elapsed Time (ms),Acceleration X,Acceleration Y,Acceleration Z\n")
+            }
+
+            val currentTime = System.currentTimeMillis()
+            val elapsedTime = currentTime - startTime
+            val isoDateTime = java.time.Instant.ofEpochMilli(currentTime).toString()
+
+            writer.write("$currentTime,$isoDateTime,$elapsedTime,${acceleration.x()},${acceleration.y()},${acceleration.z()}\n")
             writer.flush()
             writer.close()
         } catch (e: IOException) {
@@ -83,9 +96,20 @@ class MetaMotionRepository(
         Log.i("imu", "Saving angular velocity data")
         val file = File(context.getExternalFilesDir(null), fileName + "_angular_velocity.csv")
         Log.i("imu", "File path: ${file.absolutePath}")
+
         try {
             val writer = BufferedWriter(FileWriter(file, true))
-            writer.write("${System.currentTimeMillis()},${angularVelocity.x()},${angularVelocity.y()},${angularVelocity.z()}\n")
+
+            // Write header if file is empty
+            if (file.length() == 0L) {
+                writer.write("Timestamp (ms),ISO DateTime,Elapsed Time (ms),Angular Velocity X,Angular Velocity Y,Angular Velocity Z\n")
+            }
+
+            val currentTime = System.currentTimeMillis()
+            val elapsedTime = currentTime - startTime
+            val isoDateTime = java.time.Instant.ofEpochMilli(currentTime).toString()
+
+            writer.write("$currentTime,$isoDateTime,$elapsedTime,${angularVelocity.x()},${angularVelocity.y()},${angularVelocity.z()}\n")
             writer.flush()
             writer.close()
         } catch (e: IOException) {
