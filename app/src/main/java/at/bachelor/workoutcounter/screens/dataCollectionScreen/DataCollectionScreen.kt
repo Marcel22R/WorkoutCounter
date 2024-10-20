@@ -54,7 +54,7 @@ fun DataCollectionScreen(
     var setCount by remember { mutableStateOf("") }
 
     // Getting the current date and time formatted
-    val currentDateTime = remember {
+    val timeOfAppUsage = remember {
         val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
         LocalDateTime.now().format(formatter)
     }
@@ -89,6 +89,7 @@ fun DataCollectionScreen(
                     if (selectedTabIndex == 0) {
                         metaMotionRepository.startSensorAndSave(fileNameSimple)
                     } else {
+                        val currentDateTime = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDateTime.now())
                         fileNameAdvanced =
                             exerciseName + "_" + personName + "_" + intensity + "_" + setCount + "_" + currentDateTime
                         metaMotionRepository.startSensorAndSave(fileNameAdvanced)
@@ -229,7 +230,7 @@ fun DataCollectionScreen(
 
                     // Display current date and time
                     TextField(
-                        value = currentDateTime,
+                        value = timeOfAppUsage,
                         onValueChange = {},
                         label = { Text("Date and Time") },
                         readOnly = true,
