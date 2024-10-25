@@ -44,6 +44,11 @@ class MetaMotionRepository(
 
     }
 
+    private fun initSensors(){
+        accelerationData = board.getModule(Accelerometer::class.java)
+        gyroscopeData = board.getModule(GyroBmi160::class.java)
+    }
+
     private fun retrieveBoard(macAddress: String) {
         Log.i("imu", "Trying to retrieve board")
         val btManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -52,8 +57,7 @@ class MetaMotionRepository(
 
         board.connectAsync().onSuccessTask<Void> {
             Log.i("imu", "Connected to $macAddress")
-            accelerationData = board.getModule(Accelerometer::class.java)
-            gyroscopeData = board.getModule(GyroBmi160::class.java)
+            initSensors()
             null
         }.continueWith { task ->
             if (task.isFaulted) {

@@ -47,17 +47,6 @@ fun TrainingScreen(
         mutableStateOf("No prediction yet")
     }
 
-//    val combinedData = remember(accelerationData, gyroscopeData) {
-//        if (accelerationData != null && gyroscopeData != null) {
-//            floatArrayOf(
-//                accelerationData!!.x(), accelerationData!!.y(), accelerationData!!.z(),
-//                gyroscopeData!!.x(), gyroscopeData!!.y(), gyroscopeData!!.z()
-//            )
-//        } else {
-//            null  // Return null if either data is missing
-//        }
-//    }
-
     val combinedData = remember(accelerationData, gyroscopeData) {
         accelerationData?.let {
             gyroscopeData?.let { it1 ->
