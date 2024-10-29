@@ -101,29 +101,37 @@ fun TrainingScreen(
 
 fun createORTSession(ortEnvironment: OrtEnvironment, context: android.content.Context): OrtSession {
     val modelBytes =
-        context.resources.openRawResource(R.raw.decision_tree_model_6_features).readBytes()
+        context.resources.openRawResource(R.raw.final_model).readBytes()
     return ortEnvironment.createSession(modelBytes)
 }
 
 fun runPrediction(inputs: FloatArray, ortSession: OrtSession, ortEnvironment: OrtEnvironment): String {
     require(inputs.size == 6) { "The input array must contain exactly 6 float values." }
 
-
     val inputName = ortSession.inputNames?.iterator()?.next()
-
+    Log.d("runPrediction", "Input tensor name: $inputName")
 
     val floatBufferInputs = FloatBuffer.wrap(inputs)
-
-
     val inputTensor = OnnxTensor.createTensor(ortEnvironment, floatBufferInputs, longArrayOf(1, 6))
 
-
     val results = ortSession.run(mapOf(inputName to inputTensor))
+    val outputValue = results[0].value
+    Log.d("runPrediction", "Output type: ${outputValue::class.simpleName}")
+    Log.d("runPrediction", "Output value: $outputValue")
 
+    if (outputValue is LongArray) {
+        val predictionIndex = outputValue[0].toInt()
+        Log.d("runPrediction", "Prediction index: $predictionIndex")
 
-    val output = results[0].value as Array<String>
+        val classLabels = arrayOf("Arnold-press", "Break", "Flat-bench-press", "Lat-Pulldown", "Romanian-deadlift", "Squats")
+        val predictedLabel = if (predictionIndex in classLabels.indices) classLabels[predictionIndex] else "Unknown"
+        Log.d("runPrediction", "Predicted label: $predictedLabel")
 
-    return output[0]
+        return predictedLabel
+    } else {
+        Log.e("runPrediction", "Unexpected output type: ${outputValue::class.simpleName}")
+        throw IllegalStateException("Unexpected output type: ${outputValue::class.simpleName}")
+    }
 }
 
 
