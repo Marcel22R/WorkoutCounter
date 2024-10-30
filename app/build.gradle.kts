@@ -62,6 +62,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.metawear)
     implementation(libs.onnxruntime)
-
+    implementation(libs.mpandroidchart)
 
 }

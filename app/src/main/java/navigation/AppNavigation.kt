@@ -13,6 +13,7 @@ import at.bachelor.workoutcounter.screens.dataCollectionScreen.DataCollectionScr
 import at.bachelor.workoutcounter.screens.dataCollectionScreen.DataCollectionViewModel
 import at.bachelor.workoutcounter.screens.screens.homeScreen.HomeScreen
 import at.bachelor.workoutcounter.screens.trainingScreen.TrainingScreen
+import at.bachelor.workoutcounter.screens.visualizationScreen.VisualizationScreen
 
 enum class MainNavOption {
     REGISTRATION,
@@ -24,7 +25,8 @@ enum class MainNavOption {
     PAST_WORKOUTS,
     STATISTICS,
     SETTINGS,
-    PROFILE
+    PROFILE,
+    VISUALIZATION
 }
 
 
@@ -57,7 +59,7 @@ fun NavGraphBuilder.mainGraph(
             )
         }
         composable(MainNavOption.COLLECTED_DATA.name) {
-            CollectedDataScreen(drawerState=drawerState)
+            CollectedDataScreen(drawerState = drawerState)
 
         }
         composable(MainNavOption.STATISTICS.name) {
@@ -65,6 +67,12 @@ fun NavGraphBuilder.mainGraph(
         }
         composable(MainNavOption.PAST_WORKOUTS.name) {
             Text(text = "This is Past Workouts")
+        }
+        composable(MainNavOption.VISUALIZATION.name) {
+            VisualizationScreen(
+                metaMotionRepository = metaMotionRepository,
+                dataCollection = dataCollectionViewModel
+            )
         }
 
     }

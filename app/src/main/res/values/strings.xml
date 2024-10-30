@@ -19,4 +19,6 @@
     <string name="end">End</string>
     <string name="drawer_collected_data">Collected data</string>
     <string name="drawer_collected_data_description">Presents collected datasets\n</string>
+    <string name="drawer_visualization">Visualization</string>
+    <string name="drawer_visualization_description">Screen for visualizing data</string>
 </resources>

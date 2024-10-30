@@ -24,6 +24,9 @@ dependencyResolutionManagement {
             url = uri("https://mbientlab.com/releases/ivyrep")
             layout("gradle")
         }
+        maven {
+            url = uri("https://jitpack.io")
+        }
     }
 }
 

@@ -55,7 +55,10 @@ fun MainCompose(
                                     NavRoutes.DataCollectionRoute.name
                                 )
                             }
-                            MainNavOption.COLLECTED_DATA-> navController.navigate(onUserPickedOption.name) {
+
+                            MainNavOption.COLLECTED_DATA -> navController.navigate(
+                                onUserPickedOption.name
+                            ) {
                                 popUpTo(
                                     NavRoutes.CollectedDataRoute.name
                                 )
@@ -96,6 +99,11 @@ fun MainCompose(
                                 )
                             }
 
+                            MainNavOption.VISUALIZATION -> navController.navigate(onUserPickedOption.name) {
+                                popUpTo(
+                                    NavRoutes.VisualizationRoute.name
+                                )
+                            }
                         }
                     }
                 }) {
@@ -122,7 +130,8 @@ enum class NavRoutes {
     RegistrationRoute,
     LoginRoute,
     SettingsRoute,
-    ProfileRoute
+    ProfileRoute,
+    VisualizationRoute
 }
 
 object DrawerParams {
@@ -161,6 +170,12 @@ object DrawerParams {
             R.string.drawer_statistics,
             R.drawable.baseline_bar_chart_24,
             R.string.drawer_statistics_description
+        ),
+        AppDrawerItemInfo(
+            MainNavOption.VISUALIZATION,
+            R.string.drawer_visualization,
+            R.drawable.baseline_show_chart_24,
+            R.string.drawer_visualization_description
         )
     )
 

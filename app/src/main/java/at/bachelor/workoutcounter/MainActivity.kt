@@ -1,7 +1,5 @@
 package at.bachelor.workoutcounter
 
-import ai.onnxruntime.OrtEnvironment
-import ai.onnxruntime.OrtSession
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,10 +28,5 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         metaMotionRepository.unbindService()
-    }
-
-    private fun createORTSession( ortEnvironment: OrtEnvironment) : OrtSession {
-        val modelBytes = resources.openRawResource( R.raw.random_forest_model_6_features).readBytes()
-        return ortEnvironment.createSession( modelBytes )
     }
 }
