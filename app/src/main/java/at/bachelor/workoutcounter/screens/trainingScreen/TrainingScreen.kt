@@ -48,11 +48,11 @@ fun TrainingScreen(
     }
 
     val combinedData = remember(accelerationData, gyroscopeData) {
-        accelerationData?.let {
-            gyroscopeData?.let { it1 ->
+        accelerationData?.let { acc ->
+            gyroscopeData?.let { gyr ->
                 floatArrayOf(
-                    it.x(), it.y(), it.z(),
-                    it1.x(), it1.y(), it1.z()
+                    acc.x(), acc.y(), acc.z(),
+                    gyr.x(), gyr.y(), gyr.z(),
                 )
             }
         }
@@ -101,7 +101,7 @@ fun TrainingScreen(
 
 fun createORTSession(ortEnvironment: OrtEnvironment, context: android.content.Context): OrtSession {
     val modelBytes =
-        context.resources.openRawResource(R.raw.final_model).readBytes()
+        context.resources.openRawResource(R.raw.final_model_chav).readBytes()
     return ortEnvironment.createSession(modelBytes)
 }
 
@@ -117,7 +117,6 @@ fun runPrediction(inputs: FloatArray, ortSession: OrtSession, ortEnvironment: Or
     val results = ortSession.run(mapOf(inputName to inputTensor))
     val outputValue = results[0].value
     Log.d("runPrediction", "Output type: ${outputValue::class.simpleName}")
-    Log.d("runPrediction", "Output value: $outputValue")
 
     if (outputValue is LongArray) {
         val predictionIndex = outputValue[0].toInt()

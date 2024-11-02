@@ -1,6 +1,7 @@
 package at.bachelor.workoutcounter.screens.visualizationScreen
 
 import LowPassRunningAverageFilter
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -43,16 +44,16 @@ fun VisualizationScreen(
     val accelerationData by dataCollection.accelerationData.collectAsState()
     val gyroscopeData by dataCollection.gyroscopeData.collectAsState()
 
-    // Define window size for the moving average filter
     val windowSize = 100
     val alpha = 0.1f
     val errorWhenNoMovement = 0.14f
 
-    // Remember list to accumulate entries for the chart
     val filteredAccRData = remember { mutableStateListOf<Entry>() }
+    val maximaData = remember { mutableStateListOf<Entry>() }
     val filter = remember { LowPassRunningAverageFilter(windowSize, alpha) }
     val indexAfterRemove = remember { mutableIntStateOf(0) }
     val accR = remember { mutableFloatStateOf(0.0f) }
+    val previousFilteredValue = remember { mutableFloatStateOf(0.0f) }
 
     LaunchedEffect(accelerationData) {
         accelerationData?.let { acc ->
@@ -63,6 +64,20 @@ fun VisualizationScreen(
 
             val filteredValue = filter.filter(accR.floatValue)
 
+            if (filteredAccRData.size > 1) {
+                val currentValue = filteredAccRData.last().y
+                if (currentValue > previousFilteredValue.floatValue && currentValue > filteredValue) {
+                    Log.i("Maxima-Search", "Maxima found: $currentValue")
+                    maximaData.add(
+                        Entry(
+                            (filteredAccRData.size - 1).toFloat() + indexAfterRemove.intValue,
+                            currentValue
+                        )
+                    )
+                }
+                previousFilteredValue.floatValue = currentValue
+            }
+
             filteredAccRData.add(
                 Entry(
                     filteredAccRData.size.toFloat() + indexAfterRemove.intValue,
@@ -72,9 +87,12 @@ fun VisualizationScreen(
             if (filteredAccRData.size > 1000) {
                 indexAfterRemove.intValue++
                 filteredAccRData.removeAt(0)
+                if (maximaData.isNotEmpty() && maximaData.first().x == indexAfterRemove.intValue.toFloat() - 1) {
+                    maximaData.removeAt(0)
+                }
             }
 
-            delay(100) // Simulate real-time data feed
+            delay(100)
         }
     }
 
@@ -96,7 +114,7 @@ fun VisualizationScreen(
                 .weight(1f),
             factory = { context ->
                 LineChart(context).apply {
-                    description = Description().apply { text = "Filtered acc_r over Time" }
+                    description = Description().apply { text = "Filtered acc_r with Maxima" }
                     setDrawGridBackground(false)
                     axisRight.isEnabled = false
                 }
@@ -109,7 +127,15 @@ fun VisualizationScreen(
                     setDrawValues(false)
                 }
 
-                chart.data = LineData(dataSet)
+                val maximaSet = LineDataSet(maximaData, "Maxima").apply {
+                    color = Color.Red.toArgb()
+                    setDrawCircles(true)
+                    setDrawCircleHole(false)
+                    circleRadius = 5f
+                    setDrawValues(false)
+                }
+
+                chart.data = LineData(dataSet, maximaSet)
                 chart.notifyDataSetChanged()
                 chart.invalidate() // Refresh the chart
             }
